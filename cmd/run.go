@@ -70,7 +70,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 	if (mp.IsProjectType("go")) {
-		mp.Exec([]string{"go", "run", "main.go"})
+		mp.Exec(append([]string{"go", "run", "main.go"}, args...))
 		os.Exit(0)
 	}
 }

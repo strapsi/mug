@@ -1,11 +1,10 @@
 package mp
 
 import (
-	// "bytes"
 	"fmt"
 	"os"
-	// "strings"
 	"runtime"
+	"io/ioutil"
 	"os/exec"
 	"path/filepath"
 )
@@ -62,4 +61,15 @@ func ExecEnv(command []string, env []string) {
 
 func IsWindows() bool {
 	return runtime.GOOS == "windows"
+}
+
+func CreateConfigFile(dir string) {
+	filename := filepath.FromSlash(filepath.ToSlash(dir) + "/.ninja.yaml")
+    if !FileExists(filename) {
+    	err := ioutil.WriteFile(filename, []byte(""), 0644)
+    	CheckErrorExit(err)
+    	fmt.Println("init done. created config file")
+    } else {
+    	fmt.Println("init done. file exists")
+    }
 }

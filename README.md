@@ -1,6 +1,7 @@
 * commands
 	* run
 	* build
+	* _init_
 	* _log_
 	* _deploy_
 	* _proxy_
