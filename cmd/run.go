@@ -23,12 +23,13 @@ import (
 )
 
 var PreferNpm bool
+var SpringProfile string
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "runs default development environment for working directory",
-	Long: `Checks which project we are in and runs the according developent script
+	Long: `Checks which project we are in and runs the according run command
 e.g. gradle bootRun or ng serve`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runCommand(cmd, args)
@@ -38,17 +39,7 @@ e.g. gradle bootRun or ng serve`,
 func init() {
 	rootCmd.AddCommand(runCmd)
 	runCmd.Flags().BoolVarP(&PreferNpm, "npm", "n", false, "prefer npm over ng to run project")
-	// runCmd.MarkFlagRequired("dbl")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// runCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	runCmd.Flags().StringVarP(&SpringProfile, "profile", "p", "", "spring profile")
 }
 
 func runCommand(cmd *cobra.Command, args []string) {
@@ -60,6 +51,22 @@ func runCommand(cmd *cobra.Command, args []string) {
 	if (mp.IsProjectType("npm")) { 
 		fmt.Println("running npm start")		
 		mp.Exec([]string{"npm", "start"})
+		os.Exit(0)
+	}
+	if (mp.IsProjectType("gradle")) {
+		fmt.Println("running gradlew bootRun")
+		var bootRun []string
+		if mp.IsWindows() {
+			bootRun = []string{"cmd.exe", "/C", "gradlew.bat", "bootRun"}			
+		} else {		
+			bootRun = []string{"sh", "gradlew", "bootRun"}
+		}
+
+		if SpringProfile != "" {
+			bootRun = append(bootRun, "-Pprofile=" + SpringProfile)
+		}
+		
+		mp.Exec(bootRun)
 		os.Exit(0)
 	}
 	if (mp.IsProjectType("go")) {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	// "strings"
+	"runtime"
 	"os/exec"
 	"path/filepath"
 )
@@ -16,10 +17,11 @@ func IsProjectType(projectType string) bool {
 		case "angular": filename = "angular.json"
 		case "npm": filename = "package.json"
 		case "go": filename = "main.go"
+		case "gradle": filename = "gradlew"
 		default: filename = ""
 	}
 	if filename == "" {
-		fmt.Println("no projecttype given")
+		fmt.Println("unknown project type")
 		os.Exit(1)
 	}
 	
@@ -51,4 +53,8 @@ func Exec(command []string) {
 	fmt.Println(cmd.String())
 	err = cmd.Run()
 	CheckErrorExit(err)
+}
+
+func IsWindows() bool {
+	return runtime.GOOS == "windows"
 }
