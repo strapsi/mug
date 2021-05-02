@@ -22,8 +22,8 @@ import (
 	"ninja/mp"
 )
 
-var PreferNpm bool
-var SpringProfile string
+var preferNpmStart bool
+var springProfile string
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
@@ -38,12 +38,12 @@ e.g. gradle bootRun or ng serve`,
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().BoolVarP(&PreferNpm, "npm", "n", false, "prefer npm over ng to run project")
-	runCmd.Flags().StringVarP(&SpringProfile, "profile", "p", "", "spring profile")
+	runCmd.Flags().BoolVarP(&preferNpmStart, "npm", "n", false, "prefer npm over ng to run project")
+	runCmd.Flags().StringVarP(&springProfile, "profile", "p", "", "spring profile")
 }
 
 func runCommand(cmd *cobra.Command, args []string) {
-	if (mp.IsProjectType("angular") && !PreferNpm) { 
+	if (mp.IsProjectType("angular") && !preferNpmStart) { 
 		fmt.Println("running ng serve")		
 		mp.Exec(append([]string{"ng", "serve"}, args...))
 		os.Exit(0)
@@ -62,8 +62,8 @@ func runCommand(cmd *cobra.Command, args []string) {
 			bootRun = []string{"sh", "gradlew", "bootRun"}
 		}
 
-		if SpringProfile != "" {
-			bootRun = append(bootRun, "-Pprofile=" + SpringProfile)
+		if springProfile != "" {
+			bootRun = append(bootRun, "-Pprofile=" + springProfile)
 		}
 		
 		mp.Exec(bootRun)

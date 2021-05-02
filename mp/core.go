@@ -41,12 +41,17 @@ func WorkingDirectory() string {
 }
 
 func Exec(command []string) {
+	ExecEnv(command, []string{})
+}
+
+func ExecEnv(command []string, env []string) {
 	lookupCommand, err := exec.LookPath(command[0])
 	CheckErrorExit(err)
 	args := append([]string{lookupCommand}, command[1:]...)	
 	cmd := &exec.Cmd {
 		Path: lookupCommand,
 		Args: args,
+		Env: append(os.Environ(), env...),
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,		
 	}
