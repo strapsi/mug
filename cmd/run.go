@@ -51,7 +51,7 @@ func init() {
 	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func runCommand(cmd *cobra.Command, args []string) {	
+func runCommand(cmd *cobra.Command, args []string) {
 	if (mp.IsProjectType("angular") && !PreferNpm) { 
 		fmt.Println("running ng serve")		
 		mp.Exec(append([]string{"ng", "serve"}, args...))

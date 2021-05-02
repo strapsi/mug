@@ -34,22 +34,14 @@ func FileExists(name string) bool {
 
 func WorkingDirectory() string {
 	wd, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	CheckErrorExit(err)
 	return wd
 }
 
 func Exec(command []string) {
 	lookupCommand, err := exec.LookPath(command[0])
-	if err != nil {
-		fmt.Println(err)
-	}
-	args := []string{lookupCommand}
-	for _, arg := range command[1:] {
-		args = append(args, arg)
-	}
+	CheckErrorExit(err)
+	args := append([]string{lookupCommand}, command[1:]...)	
 	cmd := &exec.Cmd {
 		Path: lookupCommand,
 		Args: args,
@@ -58,7 +50,5 @@ func Exec(command []string) {
 	}
 	fmt.Println(cmd.String())
 	err = cmd.Run()
-	if err != nil {
-		fmt.Println(err)
-	}
+	CheckErrorExit(err)
 }
