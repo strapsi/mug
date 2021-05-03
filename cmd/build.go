@@ -57,7 +57,7 @@ func buildCommand(cmd *cobra.Command, args []string) {
 		profile = "--" + profile
 	
 		fmt.Println("running ng build " + profile)
-		mp.Exec(append([]string{"ng", "build", "profile"}, args...))
+		mp.Exec(append([]string{"ng", "build", profile}, args...))
 		os.Exit(0)
 	}
 	if (mp.IsProjectType("npm")) { 
