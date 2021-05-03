@@ -54,7 +54,7 @@ func ExecEnv(command []string, env []string) {
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,		
 	}
-	fmt.Println(cmd.String())
+	// fmt.Println(cmd.String())
 	err = cmd.Run()
 	CheckErrorExit(err)
 }
