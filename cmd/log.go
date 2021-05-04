@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	// "fmt"
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/strapsi/go-docker"
 	"ninja/mp"
@@ -79,8 +79,10 @@ func dockerLog() {
 					command = append(command, "-f")
 				}
 				mp.Exec(command)
+				os.Exit(0)
 			}
 		}
 	}
+	fmt.Println("no containers are running")
 	os.Exit(0)
 }
