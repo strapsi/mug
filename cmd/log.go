@@ -1,4 +1,7 @@
 /*
+
+Package cmd : log
+
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +32,7 @@ var gitLogFormat = "%C(yellow)%h%C(reset) %C(auto)%d%C(reset) %s %C(blue)%cr%C(r
 var dockerLogName string
 var logLimit string
 var dockerLogFollow bool
+var withGitFileNames bool
 
 // logCmd represents the log command
 var logCmd = &cobra.Command{
@@ -45,18 +49,23 @@ func init() {
 	logCmd.Flags().StringVarP(&dockerLogName, "docker", "d", "", "name of container to log. can be fuzzy")
 	logCmd.Flags().StringVarP(&logLimit, "limit", "l", "10", "only print last x logs")
 	logCmd.Flags().BoolVarP(&dockerLogFollow, "follow", "f", false, "follow log output")
+	logCmd.Flags().BoolVarP(&withGitFileNames, "file-names", "n", false, "show changed files in git log")
 }
 
 func logCommand(cmd *cobra.Command, args []string) {
 	if dockerLogName != "" {
 		dockerLog()
 	}
-	
+
 	gitLog() // default to git log
 }
 
 func gitLog() {
-	mp.Exec([]string{"git", "log", "--format=" + gitLogFormat + "", "--graph", "-" + logLimit})
+	cmd := []string{"git", "log", "--format=" + gitLogFormat + "", "--graph", "-" + logLimit}
+	if withGitFileNames {
+		cmd = append(cmd, "--name-only")
+	}
+	mp.Exec(cmd)
 	os.Exit(0)
 }
 
