@@ -43,7 +43,7 @@ var logCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(logCmd)
 	logCmd.Flags().StringVarP(&dockerLogName, "docker", "d", "", "name of container to log. can be fuzzy")
-	logCmd.Flags().StringVarP(&logLimit, "limit", "l", "100", "only print last x logs")
+	logCmd.Flags().StringVarP(&logLimit, "limit", "l", "10", "only print last x logs")
 	logCmd.Flags().BoolVarP(&dockerLogFollow, "follow", "f", false, "follow log output")
 }
 
