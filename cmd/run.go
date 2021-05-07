@@ -1,4 +1,7 @@
 /*
+
+Package cmd : run command
+
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"github.com/spf13/cobra"
 	"ninja/mp"
+	"os"
 )
 
 var preferNpmStart bool
@@ -45,36 +48,27 @@ func init() {
 }
 
 func runCommand(cmd *cobra.Command, args []string) {
-	if (mp.IsProjectType("angular") && !preferNpmStart) { 
-		fmt.Println("running ng serve")		
+	if mp.IsProjectType("angular") && !preferNpmStart {
+		fmt.Println("running ng serve")
 		mp.Exec(append([]string{"ng", "serve"}, args...))
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("npm")) { 
-		fmt.Println("running npm start")		
+	if mp.IsProjectType("npm") {
+		fmt.Println("running npm start")
 		mp.Exec([]string{"npm", "start"})
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("gradle")) {
+	if mp.IsProjectType("gradle") {
 		fmt.Println("running gradlew bootRun")
 		bootRun := append(mp.Gradle(!useNativeGradleForRun), "bootRun")
 		if springProfile != "" {
-			bootRun = append(bootRun, "-Pprofile=" + springProfile)
-		}		
+			bootRun = append(bootRun, "-Pprofile="+springProfile)
+		}
 		mp.Exec(bootRun)
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("go")) {
+	if mp.IsProjectType("go") {
 		mp.Exec(append([]string{"go", "run", "main.go"}, args...))
 		os.Exit(0)
 	}
 }
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+STAGED_GO_FILES=$(git diff --cached --name-only | grep ".go$")
+
+if [[ "$STAGED_GO_FILES" = "" ]]; then
+  exit 0
+fi
+
+echo -e "\e[33mchecking staged files...\e[0m"
+
+PASS=true
+
+go vet .
+
+for FILE in $STAGED_GO_FILES
+do	
+	golint "-set_exit_status" $FILE
+	if [[ $? == 1 ]]; then
+		PASS=false
+	fi
+done
+
+if [[ $? != 0 ]]; then
+	PASS=false
+fi	
+
+if ! $PASS; then
+	echo -e "\e[31mCOMMIT FAILED\e[0m"
+	exit 1
+else
+	for FILE in $STAGED_GO_FILES
+	do			
+		gofmt -w $FILE
+		git add $FILE
+	done
+	echo -e "\e[32mCOMMIT SUCCEEDED\e[0m"
+fi
