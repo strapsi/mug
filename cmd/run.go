@@ -24,6 +24,7 @@ import (
 
 var preferNpmStart bool
 var springProfile string
+var useNativeGradleForRun bool
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
@@ -40,6 +41,7 @@ func init() {
 	rootCmd.AddCommand(runCmd)
 	runCmd.Flags().BoolVarP(&preferNpmStart, "npm", "n", false, "prefer npm over ng to run project")
 	runCmd.Flags().StringVarP(&springProfile, "profile", "p", "", "spring profile")
+	runCmd.Flags().BoolVarP(&useNativeGradleForRun, "gradle", "g", false, "use native gradle")
 }
 
 func runCommand(cmd *cobra.Command, args []string) {
@@ -55,17 +57,10 @@ func runCommand(cmd *cobra.Command, args []string) {
 	}
 	if (mp.IsProjectType("gradle")) {
 		fmt.Println("running gradlew bootRun")
-		var bootRun []string
-		if mp.IsWindows() {
-			bootRun = []string{"cmd.exe", "/C", "gradlew.bat", "bootRun"}			
-		} else {		
-			bootRun = []string{"sh", "gradlew", "bootRun"}
-		}
-
+		bootRun := append(mp.Gradle(!useNativeGradleForRun), "bootRun")
 		if springProfile != "" {
 			bootRun = append(bootRun, "-Pprofile=" + springProfile)
-		}
-		
+		}		
 		mp.Exec(bootRun)
 		os.Exit(0)
 	}
