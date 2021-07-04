@@ -15,8 +15,7 @@ limitations under the License.
 */
 package main
 
-// import "github.com/strapsi/ninja/cmd"
-import "ninja/cmd"
+import "mug/cmd"
 
 func main() {
 	cmd.Execute()

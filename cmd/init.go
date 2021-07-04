@@ -1,5 +1,8 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Package cmd : init command
+
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,9 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"github.com/spf13/cobra"
-	"ninja/mp"
+	"mug/mp"
+	"os"
 )
 
 var createConfigDir string
@@ -27,8 +30,8 @@ var createConfigDir string
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "initialize ninja",
-	Long: `creates the ninja config file. default location is $HOME but can be specified`,
+	Short: "initialize mug",
+	Long:  `creates the mug config file. default location is $HOME but can be specified`,
 	Run: func(cmd *cobra.Command, args []string) {
 		initCommand(cmd, args)
 	},
@@ -50,11 +53,11 @@ func init() {
 }
 
 func initCommand(cmd *cobra.Command, args []string) {
-	fmt.Println("initializing ninja")
+	fmt.Println("initializing mug")
 	var dir string
 	if createConfigDir == "" {
 		if mp.IsWindows() {
-			dir = os.Getenv("UserProfile")	
+			dir = os.Getenv("UserProfile")
 		} else {
 			dir = os.Getenv("HOME")
 		}

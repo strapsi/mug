@@ -1,5 +1,8 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Package cmd : hash command
+
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,19 +19,19 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"crypto/sha512"
+	"fmt"
 	"github.com/spf13/cobra"
-	"ninja/mp"
+	"mug/mp"
 )
 
 // hashCmd represents the hash command
 var hashCmd = &cobra.Command{
 	Use:   "hash",
 	Short: "hash the input string",
-	Long: `returns a sha512 hash of the given string`,
+	Long:  `returns a sha512 hash of the given string`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if (len(args) < 1) {
+		if len(args) < 1 {
 			mp.ExitWithError("no string input provided")
 		}
 		hashCommand(cmd, args)

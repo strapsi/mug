@@ -1,5 +1,8 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Package cmd : build command
+
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,11 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
-
-	"ninja/mp"
+	"mug/mp"
+	"os"
 )
 
 var preferNpmBuild bool
@@ -33,9 +34,8 @@ var useNativeGradleForBuild bool
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "build the current project",
-	Long: `builds the current project we are in. can also build docker containers
-e.g. gradlew clean build or ng build --prod`,
+	Short: "build project",
+	Long:  `detects the type of project we are in and builds it`,
 	Run: func(cmd *cobra.Command, args []string) {
 		buildCommand(cmd, args)
 	},
@@ -43,40 +43,41 @@ e.g. gradlew clean build or ng build --prod`,
 
 func init() {
 	rootCmd.AddCommand(buildCmd)
-	buildCmd.Flags().BoolVarP(&preferNpmBuild, "npm", "n", false, "prefer npm run build over ng build to run project")
-	buildCmd.Flags().StringVarP(&ngProfile, "profile", "p", "", "angular profile e.g. prod")
+	buildCmd.Flags().BoolVarP(&preferNpmBuild, "npm", "n", false, "prefer \"npm run build\" over \"ng build\" to build project")
+	buildCmd.Flags().StringVarP(&ngProfile, "profile", "p", "", "specify angular profile to build with e.g. prod")
 	buildCmd.Flags().BoolVarP(&ignoreTestOnBuild, "ignore-tests", "i", false, "ignore tests on build")
-	buildCmd.Flags().StringVarP(&goBuildTarget, "target", "t", "", "go build target linux | windows")	
-	buildCmd.Flags().BoolVarP(&useNativeGradleForBuild, "gradle", "g", false, "use native gradle")
+	buildCmd.Flags().StringVarP(&goBuildTarget, "target", "t", "", "go build target [linux | windows]")
+	buildCmd.Flags().BoolVarP(&useNativeGradleForBuild, "gradle", "g", false, "use native gradle binary instead of gradlew")
 }
 
 func buildCommand(cmd *cobra.Command, args []string) {
-	if (mp.IsProjectType("angular") && !preferNpmBuild) { 
+	if mp.IsProjectType("angular") && !preferNpmBuild {
 		profile := "prod"
 		if ngProfile != "" {
 			profile = ngProfile
 		}
 		profile = "--" + profile
-	
+
 		fmt.Println("running ng build " + profile)
 		mp.Exec(append([]string{"ng", "build", profile}, args...))
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("npm")) { 
-		fmt.Println("running npm run build")		
+	if mp.IsProjectType("npm") {
+		fmt.Println("running npm run build")
 		mp.Exec([]string{"npm", "run", "build"})
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("gradle")) {
+	if mp.IsProjectType("gradle") {
 		fmt.Println("running gradlew clean build")
 		bootRun := append(mp.Gradle(!useNativeGradleForBuild), "clean", "build")
 		if ignoreTestOnBuild {
-			bootRun = append(bootRun, "-x", "test")	
+			bootRun = append(bootRun, "-x", "test")
 		}
 		mp.Exec(bootRun)
 		os.Exit(0)
 	}
-	if (mp.IsProjectType("go")) {
+	if mp.IsProjectType("go") {
+		fmt.Println("running go build")
 		var env []string
 		if goBuildTarget != "" {
 			if goBuildTarget == "linux" {
@@ -86,7 +87,7 @@ func buildCommand(cmd *cobra.Command, args []string) {
 				env = []string{"GOOS=windows", "GOARCH=amd64"}
 			}
 		}
-			
+
 		mp.ExecEnv([]string{"go", "build"}, env)
 		os.Exit(0)
 	}

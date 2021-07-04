@@ -1,4 +1,4 @@
-module ninja
+module mug
 
 go 1.16
 

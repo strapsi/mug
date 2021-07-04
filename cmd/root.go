@@ -1,5 +1,8 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Package cmd : root command
+
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +20,8 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"github.com/spf13/cobra"
+	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -28,11 +31,18 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "ninja",
-	Short: "ninja - a ninja can do anything",
+	Use:   "mug",
+	Short: "mug - a mug can do anything",
+	//	Long: `
+	//|\ | | |\ |    |  /\
+	//| \| | | \| \__/ /~~\`,
 	Long: `
-|\ | | |\ |    |  /\  
-| \| | | \| \__/ /~~\`,
+   _____   ____ ___  ________ 
+  /     \ |    |   \/  _____/ 
+ /  \ /  \|    |   /   \  ___ 
+/    Y    \    |  /\    \_\  \
+\____|__  /______/  \______  /
+        \/                 \/ `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) {
@@ -52,8 +62,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ninja.yaml)")
-	
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mug.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -70,9 +79,9 @@ func initConfig() {
 		home, err := homedir.Dir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".ninja" (without extension).
+		// Search config in home directory with name ".mug" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".ninja")
+		viper.SetConfigName(".mug")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

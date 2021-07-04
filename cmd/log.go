@@ -1,8 +1,7 @@
 /*
-
 Package cmd : log
 
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/strapsi/go-docker"
-	"ninja/mp"
+	"mug/mp"
 	"os"
 	"regexp"
 )

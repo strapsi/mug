@@ -1,15 +1,20 @@
+/*
+ Package mp : command helper functions
+*/
+
 package mp
 
+// Gradle os specific gradle command
 func Gradle(useScript bool) []string {
-	cmd := []string{}
+	var cmd []string
 	if useScript {
 		if IsWindows() {
-			cmd  = append(cmd, "cmd.exe", "/C", "gradlew.bat")
+			cmd = append(cmd, "cmd.exe", "/C", "gradlew.bat")
 		} else {
-			cmd  = append(cmd, "sh", "gradlew")
+			cmd = append(cmd, "sh", "gradlew")
 		}
 	} else {
 		cmd = append(cmd, "gradle")
 	}
-	return cmd	
+	return cmd
 }
