@@ -87,8 +87,7 @@ func buildCommand(cmd *cobra.Command, args []string) {
 				env = []string{"GOOS=windows", "GOARCH=amd64"}
 			}
 		}
-
-		mp.ExecEnv([]string{"go", "build"}, env)
+		mp.ExecEnv(append([]string{"go", "build"}, args...), env)
 		os.Exit(0)
 	}
 }
