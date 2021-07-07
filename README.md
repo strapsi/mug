@@ -23,14 +23,14 @@ Flags:
 ```
 
 * commands
-        * run
-        * build
-        * init
-        * log
-        * hash
-        * completion
-        * _deploy_
-        * _proxy_
+        - run
+        - build
+        - init
+        - log
+        - hash
+        - completion
+        - _deploy_
+        - _proxy_
 
 * config
         * _globally and locally_
