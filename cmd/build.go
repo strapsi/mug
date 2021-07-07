@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"mug/mp"
-	"os"
+	"time"
 )
 
 var preferNpmBuild bool
@@ -30,12 +30,19 @@ var ngProfile string
 var ignoreTestOnBuild bool
 var goBuildTarget string
 var useNativeGradleForBuild bool
+var startTime time.Time
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:   "build",
 	Short: "build project",
 	Long:  `detects the type of project we are in and builds it`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		startTime = time.Now()
+	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("build took %s\n", time.Since(startTime))
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		buildCommand(cmd, args)
 	},
@@ -60,34 +67,31 @@ func buildCommand(cmd *cobra.Command, args []string) {
 
 		fmt.Println("running ng build " + profile)
 		mp.Exec(append([]string{"ng", "build", profile}, args...))
-		os.Exit(0)
-	}
-	if mp.IsProjectType("npm") {
+	} else if mp.IsProjectType("npm") {
 		fmt.Println("running npm run build")
 		mp.Exec([]string{"npm", "run", "build"})
-		os.Exit(0)
-	}
-	if mp.IsProjectType("gradle") {
-		fmt.Println("running gradlew clean build")
-		bootRun := append(mp.Gradle(!useNativeGradleForBuild), "clean", "build")
+	} else if mp.IsProjectType("gradle") {
+		fmt.Println("running gradle clean build")
+		cleanBuild := append(mp.Gradle(!useNativeGradleForBuild), "clean", "build")
 		if ignoreTestOnBuild {
-			bootRun = append(bootRun, "-x", "test")
+			cleanBuild = append(cleanBuild, "-x", "test")
 		}
-		mp.Exec(bootRun)
-		os.Exit(0)
-	}
-	if mp.IsProjectType("go") {
+		mp.Exec(cleanBuild)
+	} else if mp.IsProjectType("go") {
+		mugFile := mp.ReadMugFile()
 		fmt.Println("running go build")
 		var env []string
 		if goBuildTarget != "" {
 			if goBuildTarget == "linux" {
-				env = []string{"GOOS=linux", "GOARCH=amd64"}
+				env = append(env, "GOOS=linux", "GOARCH=amd64")
 			}
 			if goBuildTarget == "windows" {
-				env = []string{"GOOS=windows", "GOARCH=amd64"}
+				env = append(env, "GOOS=windows", "GOARCH=amd64")
 			}
 		}
-		mp.ExecEnv(append([]string{"go", "build"}, args...), env)
-		os.Exit(0)
+		env = append(env, "BUILD_TIME="+time.Now().String())
+		command := append([]string{"go", "build"}, mugFile.Build.Args...)
+		command = append(command, args...)
+		mp.ExecEnv(command, env)
 	}
 }

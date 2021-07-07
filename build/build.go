@@ -18,7 +18,7 @@ limitations under the License.
 */
 package build
 
-// Time system time at build
+// Time UTC time at build
 var Time string
 
 // Version executable version

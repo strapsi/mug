@@ -20,11 +20,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"os"
-
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 )
 
 var cfgFile string
@@ -33,9 +32,6 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "mug",
 	Short: "mug - a mug can do anything",
-	//	Long: `
-	//|\ | | |\ |    |  /\
-	//| \| | | \| \__/ /~~\`,
 	Long: `
    _____   ____ ___  ________ 
   /     \ |    |   \/  _____/ 
@@ -62,7 +58,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mug.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

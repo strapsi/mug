@@ -37,3 +37,4 @@ Flags:
         * _default npm build command_
         * _git log_
         * _default log length per log type_
+        * _logger mit allgmeinen verbose command_
