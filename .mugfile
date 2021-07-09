@@ -4,4 +4,4 @@ build:
     - -ldflags
     - "-X mug/build.Version=$version -X mug/build.Time=$utc"
 
-$version: v0.0.1
+$version: 0.0.1

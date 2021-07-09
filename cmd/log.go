@@ -22,7 +22,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strapsi/go-docker"
 	"mug/mp"
-	"os"
 	"regexp"
 )
 
@@ -35,9 +34,10 @@ var withGitFileNames bool
 
 // logCmd represents the log command
 var logCmd = &cobra.Command{
-	Use:   "log",
-	Short: "output log",
-	Long:  `outputs log`,
+	Use:     "log",
+	Aliases: []string{"l"},
+	Short:   "output log",
+	Long:    `outputs log`,
 	Run: func(cmd *cobra.Command, args []string) {
 		logCommand(cmd, args)
 	},
@@ -54,9 +54,9 @@ func init() {
 func logCommand(cmd *cobra.Command, args []string) {
 	if dockerLogName != "" {
 		dockerLog()
+	} else {
+		gitLog() // default to git log
 	}
-
-	gitLog() // default to git log
 }
 
 func gitLog() {
@@ -65,7 +65,6 @@ func gitLog() {
 		cmd = append(cmd, "--name-only")
 	}
 	mp.Exec(cmd)
-	os.Exit(0)
 }
 
 func dockerLog() {
@@ -87,10 +86,8 @@ func dockerLog() {
 					command = append(command, "-f")
 				}
 				mp.Exec(command)
-				os.Exit(0)
 			}
 		}
 	}
 	fmt.Println("no containers are running")
-	os.Exit(0)
 }

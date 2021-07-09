@@ -38,8 +38,6 @@ type MugFileBuild struct {
 var mugFile = MugFile{}
 var userVariables map[interface{}]interface{}
 
-// TODO mugFile koennte noch leer sein wenn kein mugfile da ist
-
 // ReadMugFile returns the mug mugFile as struct
 func ReadMugFile() *MugFile {
 	start := time.Now()

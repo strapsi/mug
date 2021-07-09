@@ -34,16 +34,14 @@ var startTime time.Time
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
-	Use:   "build",
-	Short: "build project",
-	Long:  `detects the type of project we are in and builds it`,
-	PreRun: func(cmd *cobra.Command, args []string) {
-		startTime = time.Now()
-	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("build took %s\n", time.Since(startTime))
-	},
+	Use:     "build",
+	Aliases: []string{"b"},
+	Short:   "build project",
+	Long:    `detects the type of project we are in and builds it`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// activate verbose mode for build (just for printing build time)
+		err := rootCmd.Flags().Set("verbose", "true")
+		mp.CheckErrorExit(err)
 		buildCommand(cmd, args)
 	},
 }
