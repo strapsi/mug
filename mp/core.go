@@ -85,6 +85,22 @@ func Exec(command []string) {
 	ExecEnv(command, []string{})
 }
 
+// ExecEnvResult executes an os command with environment params
+func ExecEnvResult(command []string, env []string) []byte {
+	lookupCommand, err := exec.LookPath(command[0])
+	CheckErrorExit(err)
+	args := append([]string{lookupCommand}, command[1:]...)
+	cmd := &exec.Cmd{
+		Path: lookupCommand,
+		Args: args,
+		Env:  append(os.Environ(), env...),
+	}
+	// fmt.Println(cmd.String())
+	output, err := cmd.CombinedOutput()
+	CheckErrorExit(err)
+	return output
+}
+
 // ExecEnv executes an os command with environment params
 func ExecEnv(command []string, env []string) {
 	lookupCommand, err := exec.LookPath(command[0])
