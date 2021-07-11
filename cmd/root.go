@@ -23,6 +23,7 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"mug/build"
 	"os"
 	"time"
 )
@@ -40,11 +41,9 @@ var rootCmd = &cobra.Command{
  /  \ /  \|    |   /   \  ___ 
 /    Y    \    |  /\    \_\  \
 \____|__  /______/  \______  /
-        \/                 \/ `,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) {
-	// },
+        \/                 \/ 
+
+version: ` + build.Version,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
