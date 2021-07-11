@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"mug/mp"
-	"strings"
 )
 
 var addAll bool
@@ -44,55 +43,10 @@ func init() {
 }
 
 func commitCommand(cmd *cobra.Command, args []string) {
-	output := mp.ExecEnvResult([]string{"git", "branch", "--show-current"}, []string{})
-	branch := fmt.Sprintf("%s", output)
-	message := composeMessage(branch, overrideType, args)
-	var command []string
-	if addAll {
-		command = []string{"git", "add", "."}
-		mp.Exec(command)
+	fmt.Println("running git commit")
+	add, commit := mp.FrdCommit(args, mp.CurrentGitBranch(), addAll, overrideType)
+	if len(add) > 0 {
+		mp.Exec(add)
 	}
-	command = []string{"git", "commit", "-m", message}
-	mp.Exec(command)
-}
-
-func composeMessage(branch string, overrideType string, args []string) string {
-	if len(args) < 1 {
-		mp.ExitWithError("wrong number of arguments. expecting message")
-	}
-	commitType, id := parseBranch(branch, overrideType)
-	command := fmt.Sprintf("[%s][FRD-%s] %s\n", commitType, id, args[0])
-	return command
-}
-
-func parseCommitType(commitType string) string {
-	switch strings.ToLower(commitType) {
-	case "feature", "f":
-		return "FEATURE"
-	case "refactor", "r":
-		return "REFACTOR"
-	case "intern", "i":
-		return "INTERN"
-	case "style", "s":
-		return "STYLE"
-	case "bugfix", "b":
-		return "BUGFIX"
-	default:
-		mp.ExitWithError("unknown commit type " + commitType)
-	}
-	return ""
-}
-
-func parseBranch(branch string, overrideType string) (string, string) {
-	parts := strings.Split(branch, "-")
-	if len(parts) < 3 {
-		mp.ExitWithError("branch has wrong format <type>-<id>-cool-feature")
-	}
-	var returnType string
-	if overrideType != "" {
-		returnType = overrideType
-	} else {
-		returnType = parts[0]
-	}
-	return parseCommitType(returnType), parts[1]
+	mp.Exec(commit)
 }

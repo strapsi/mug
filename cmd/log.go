@@ -53,21 +53,17 @@ func init() {
 
 func logCommand(cmd *cobra.Command, args []string) {
 	if dockerLogName != "" {
-		dockerLog()
+		dockerLog(args)
 	} else {
-		gitLog() // default to git log
+		gitLog(args) // default to git log
 	}
 }
 
-func gitLog() {
-	cmd := []string{"git", "log", "--format=" + gitLogFormat + "", "--graph", "-" + logLimit}
-	if withGitFileNames {
-		cmd = append(cmd, "--name-only")
-	}
-	mp.Exec(cmd)
+func gitLog(args []string) {
+	mp.Exec(mp.LogGit(args, gitLogFormat, logLimit, withGitFileNames))
 }
 
-func dockerLog() {
+func dockerLog(args []string) {
 	searchString := ""
 	for _, c := range dockerLogName {
 		searchString += `\S*` + string(c)
@@ -76,18 +72,23 @@ func dockerLog() {
 
 	containers, err := docker.Ps(&docker.PsOptions{})
 	mp.CheckErrorExit(err)
-	for _, container := range containers {
-		for _, name := range container.Names {
-			match, err := regexp.Match(searchString, []byte(name))
-			mp.CheckErrorExit(err)
-			if match {
-				command := []string{"docker", "logs", container.ID, "--tail", logLimit}
-				if dockerLogFollow {
-					command = append(command, "-f")
+	if len(containers) == 0 {
+		fmt.Println("no containers are running")
+	} else {
+		found := false
+		for _, container := range containers {
+			for _, name := range container.Names {
+				match, err := regexp.Match(searchString, []byte(name))
+				mp.CheckErrorExit(err)
+				if match {
+					mp.Exec(mp.LogDocker(args, container.ID, logLimit, dockerLogFollow))
+					found = true
+					break
 				}
-				mp.Exec(command)
+			}
+			if found {
+				break
 			}
 		}
 	}
-	fmt.Println("no containers are running")
 }

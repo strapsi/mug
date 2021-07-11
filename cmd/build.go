@@ -57,39 +57,17 @@ func init() {
 
 func buildCommand(cmd *cobra.Command, args []string) {
 	if mp.IsProjectType("angular") && !preferNpmBuild {
-		profile := "prod"
-		if ngProfile != "" {
-			profile = ngProfile
-		}
-		profile = "--" + profile
-
-		fmt.Println("running ng build " + profile)
-		mp.Exec(append([]string{"ng", "build", profile}, args...))
+		fmt.Println("running ng build " + ngProfile)
+		mp.Exec(mp.BuildAngular(args, ngProfile))
 	} else if mp.IsProjectType("npm") {
 		fmt.Println("running npm run build")
-		mp.Exec([]string{"npm", "run", "build"})
+		mp.Exec(mp.BuildNpm(args))
 	} else if mp.IsProjectType("gradle") {
 		fmt.Println("running gradle clean build")
-		cleanBuild := append(mp.Gradle(!useNativeGradleForBuild), "clean", "build")
-		if ignoreTestOnBuild {
-			cleanBuild = append(cleanBuild, "-x", "test")
-		}
-		mp.Exec(cleanBuild)
+		mp.Exec(mp.BuildGradle(args, useNativeGradleForBuild, ignoreTestOnBuild, mp.IsWindows()))
 	} else if mp.IsProjectType("go") {
 		mugFile := mp.ReadMugFile()
 		fmt.Println("running go build")
-		var env []string
-		if goBuildTarget != "" {
-			if goBuildTarget == "linux" {
-				env = append(env, "GOOS=linux", "GOARCH=amd64")
-			}
-			if goBuildTarget == "windows" {
-				env = append(env, "GOOS=windows", "GOARCH=amd64")
-			}
-		}
-		env = append(env, "BUILD_TIME="+time.Now().String())
-		command := append([]string{"go", "build"}, mugFile.Build.Args...)
-		command = append(command, args...)
-		mp.ExecEnv(command, env)
+		mp.ExecEnv(mp.BuildGo(args, mugFile.Build.Args, goBuildTarget))
 	}
 }

@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"mug/mp"
-	"os"
 )
 
 var preferNpmStart bool
@@ -50,25 +49,18 @@ func init() {
 func runCommand(cmd *cobra.Command, args []string) {
 	if mp.IsProjectType("angular") && !preferNpmStart {
 		fmt.Println("running ng serve")
-		mp.Exec(append([]string{"ng", "serve"}, args...))
-		os.Exit(0)
+		mp.Exec(mp.RunAngular(args))
 	}
 	if mp.IsProjectType("npm") {
 		fmt.Println("running npm start")
-		mp.Exec([]string{"npm", "start"})
-		os.Exit(0)
+		mp.Exec(mp.RunNpm(args))
 	}
 	if mp.IsProjectType("gradle") {
 		fmt.Println("running gradlew bootRun")
-		bootRun := append(mp.Gradle(!useNativeGradleForRun), "bootRun")
-		if springProfile != "" {
-			bootRun = append(bootRun, "-Pprofile="+springProfile)
-		}
-		mp.Exec(bootRun)
-		os.Exit(0)
+		mp.Exec(mp.RunGradle(args, useNativeGradleForRun, springProfile, mp.IsWindows()))
 	}
 	if mp.IsProjectType("go") {
-		mp.Exec(append([]string{"go", "run", "main.go"}, args...))
-		os.Exit(0)
+		fmt.Println("running go run")
+		mp.Exec(mp.RunGo(args))
 	}
 }

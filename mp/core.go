@@ -118,6 +118,12 @@ func ExecEnv(command []string, env []string) {
 	CheckErrorExit(err)
 }
 
+// CurrentGitBranch returns the name of the current git branch in the working directory
+func CurrentGitBranch() string {
+	output := ExecEnvResult([]string{"git", "branch", "--show-current"}, []string{})
+	return fmt.Sprintf("%s", output)
+}
+
 // IsWindows determines whether mug runs on windows or not
 func IsWindows() bool {
 	return runtime.GOOS == "windows"
