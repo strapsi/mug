@@ -527,6 +527,7 @@ func TestLogGit(t *testing.T) {
 		format    string
 		limit     string
 		fileNames bool
+		graph     bool
 	}
 	tests := []struct {
 		name string
@@ -540,8 +541,9 @@ func TestLogGit(t *testing.T) {
 				"ABC",
 				"10",
 				false,
+				true,
 			},
-			[]string{"git", "log", "--format=ABC", "--graph", "-10"},
+			[]string{"git", "log", "--format=ABC", "-10", "--graph"},
 		},
 		{
 			"git log with specified log limit",
@@ -550,8 +552,9 @@ func TestLogGit(t *testing.T) {
 				"ABC",
 				"33",
 				false,
+				true,
 			},
-			[]string{"git", "log", "--format=ABC", "--graph", "-33"},
+			[]string{"git", "log", "--format=ABC", "-33", "--graph"},
 		},
 		{
 			"git log with file names",
@@ -560,8 +563,9 @@ func TestLogGit(t *testing.T) {
 				"ABC",
 				"10",
 				true,
+				true,
 			},
-			[]string{"git", "log", "--format=ABC", "--graph", "-10", "--name-only"},
+			[]string{"git", "log", "--format=ABC", "-10", "--graph", "--name-only"},
 		},
 		{
 			"git log with default limit, file names and arguments",
@@ -570,13 +574,14 @@ func TestLogGit(t *testing.T) {
 				"ABC",
 				"10",
 				true,
+				true,
 			},
-			[]string{"git", "log", "--format=ABC", "--graph", "-10", "--name-only", "--oneline"},
+			[]string{"git", "log", "--format=ABC", "-10", "--graph", "--name-only", "--oneline"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := LogGit(tt.args.args, tt.args.format, tt.args.limit, tt.args.fileNames); !reflect.DeepEqual(got, tt.want) {
+			if got := LogGit(tt.args.args, tt.args.format, tt.args.limit, tt.args.fileNames, tt.args.graph); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("LogGit() = %v, want %v", got, tt.want)
 			}
 		})

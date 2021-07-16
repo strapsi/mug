@@ -22,7 +22,7 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"github.com/spf13/cobra"
-	"golang.design/x/clipboard"
+	// "golang.design/x/clipboard"
 	"mug/mp"
 )
 
@@ -47,7 +47,7 @@ func hashCommand(args []string) {
 	sha512Hash := sha512.New()
 	sha512Hash.Write([]byte(args[0]))
 	hashString := fmt.Sprintf("%x", sha512Hash.Sum(nil))
-	clipboard.Write(clipboard.FmtText, []byte(hashString))
-	clipboard.Read(clipboard.FmtText)
+	// clipboard.Write(clipboard.FmtText, []byte(hashString))
+	// clipboard.Read(clipboard.FmtText)
 	fmt.Println(hashString)
 }

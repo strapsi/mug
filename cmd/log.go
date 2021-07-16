@@ -60,7 +60,7 @@ func logCommand(args []string) {
 }
 
 func gitLog(args []string) {
-	mp.Exec(mp.LogGit(args, gitLogFormat, logLimit, withGitFileNames))
+	mp.Exec(mp.LogGit(args, gitLogFormat, logLimit, withGitFileNames, !mp.IsWindows()))
 }
 
 func dockerLog(args []string) {

@@ -126,8 +126,11 @@ func LogDocker(args []string, containerID string, limit string, follow bool) []s
 }
 
 // LogGit returns the git log exec command
-func LogGit(args []string, format string, limit string, fileNames bool) []string {
-	cmd := []string{"git", "log", "--format=" + format, "--graph", "-" + limit}
+func LogGit(args []string, format string, limit string, fileNames bool, graph bool) []string {
+	cmd := []string{"git", "log", "--format=" + format, "-" + limit}
+	if graph {
+		cmd = append(cmd, "--graph")
+	}
 	if fileNames {
 		cmd = append(cmd, "--name-only")
 	}
