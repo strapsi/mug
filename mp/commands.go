@@ -140,7 +140,13 @@ func composeMessage(branch string, overrideType string, args []string) string {
 		ExitWithError("wrong number of arguments. expecting message")
 	}
 	commitType, id := parseBranch(branch, overrideType)
-	return fmt.Sprintf("[%s][FRD-%s] %s", commitType, id, args[0])
+	var message string
+	if strings.ToLower(id) == "x" {
+		message = fmt.Sprintf("[%s] %s", commitType, id)
+	} else {
+		message = fmt.Sprintf("[%s][FRD-%s] %s", commitType, id, args[0])
+	}
+	return message
 }
 
 func parseCommitType(commitType string) string {
@@ -163,6 +169,7 @@ func parseCommitType(commitType string) string {
 	return ""
 }
 
+// parseBranch parses name of branch and returns the commit type and the jira id
 func parseBranch(branch string, overrideType string) (string, string) {
 	parts := strings.Split(branch, "-")
 	if len(parts) < 3 {
