@@ -47,6 +47,7 @@ following types can be used:
 - `intern, i`	
 - `style, s`	
 - `bugfix, b`	
+- `test, t`
 
 
 `--add` add all changed files before the commit

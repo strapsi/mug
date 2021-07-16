@@ -155,6 +155,8 @@ func parseCommitType(commitType string) string {
 		return "STYLE"
 	case "bugfix", "b":
 		return "BUGFIX"
+	case "test", "t":
+		return "TEST"
 	default:
 		ExitWithError("unknown commit type " + commitType)
 	}
