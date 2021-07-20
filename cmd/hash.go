@@ -22,6 +22,7 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"github.com/spf13/cobra"
+	"golang.design/x/clipboard"
 	"mug/mp"
 )
 
@@ -34,7 +35,7 @@ var hashCmd = &cobra.Command{
 		if len(args) < 1 {
 			mp.ExitWithError("no string input provided")
 		}
-		hashCommand(cmd, args)
+		hashCommand(args)
 	},
 }
 
@@ -42,8 +43,11 @@ func init() {
 	rootCmd.AddCommand(hashCmd)
 }
 
-func hashCommand(cmd *cobra.Command, args []string) {
-	hash := sha512.New()
-	hash.Write([]byte(args[0]))
-	fmt.Printf("%x\n", hash.Sum(nil))
+func hashCommand(args []string) {
+	sha512Hash := sha512.New()
+	sha512Hash.Write([]byte(args[0]))
+	hashString := fmt.Sprintf("%x", sha512Hash.Sum(nil))
+	clipboard.Write(clipboard.FmtText, []byte(hashString))
+	clipboard.Read(clipboard.FmtText)
+	fmt.Println(hashString)
 }

@@ -11,6 +11,9 @@ a command line tool to make the daily work easier
 
 # Table of Contents
 
+- [Development](#development)
+    * [linux](#development-linux)
+
 - [Commands](#commands)
     * [build](#build)
     * [commit](#commit)
@@ -18,6 +21,14 @@ a command line tool to make the daily work easier
     * [log](#log)
     * [proxy](#proxy)
     * [run](#run)
+
+# Development
+
+### linux
+to develop in linux you need to install these dependencies
+```shell
+sudo apt install libx11-dev  # for go clipboard
+```
 
 # Commands
 this is what mug can do for you
