@@ -12,7 +12,7 @@ a command line tool to make the daily work easier
 # Table of Contents
 
 - [Development](#development)
-    * [linux](#development-linux)
+    * [linux](#linux)
 
 - [Commands](#commands)
     * [build](#build)
@@ -76,8 +76,20 @@ print out logs different types of logs, default is `git log`
   - `--docker, -d <fuzzy-name>` prints the docker log for the given container name, the name can be fuzzy
   - `--follow, -f` follow the log output
   - `--limit, -l <n>` limit the output by n lines
-  
+
 ### proxy
+runs a beng dev proxy
+
+`--kong-url, -k <url>` name or ip of kong backend; defaults to `10.10.227.175`
+
+`--backend, -b <module>` name of the backend module if you want to use a local backend
+
+`--backend-url, -u <url>` url of the backend module if you want to use a local backend
+
+`--angular-url, -a <url>` url of the frontend; defaults to `localhost:4200`
+
+`--credentials, -c <user:password>` user and password to login with; defaults to `user1:be32`
+
 ### run
 runs a "run" command depending on the project type of the current working directory, e.g. `ng serve` or `go run`
 

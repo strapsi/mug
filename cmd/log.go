@@ -39,7 +39,7 @@ var logCmd = &cobra.Command{
 	Short:   "output log",
 	Long:    `outputs log`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logCommand(cmd, args)
+		logCommand(args)
 	},
 }
 
@@ -51,7 +51,7 @@ func init() {
 	logCmd.Flags().BoolVarP(&withGitFileNames, "file-names", "n", false, "show changed files in git log")
 }
 
-func logCommand(cmd *cobra.Command, args []string) {
+func logCommand(args []string) {
 	if dockerLogName != "" {
 		dockerLog(args)
 	} else {
