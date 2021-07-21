@@ -145,7 +145,7 @@ func composeMessage(branch string, overrideType string, args []string) string {
 	commitType, id := parseBranch(branch, overrideType)
 	var message string
 	if strings.ToLower(id) == "x" {
-		message = fmt.Sprintf("[%s] %s", commitType, id)
+		message = fmt.Sprintf("[%s] %s", commitType, args[0])
 	} else {
 		message = fmt.Sprintf("[%s][FRD-%s] %s", commitType, id, args[0])
 	}

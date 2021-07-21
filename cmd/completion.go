@@ -1,5 +1,8 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Package cmd : completion
+
+Copyright © 2021 m.vondergruen@protonmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +19,13 @@ limitations under the License.
 package cmd
 
 import (
-	"os"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // completionCmd represents the completion command
 var completionCmd = &cobra.Command{
+	Hidden: true,
 	Use:   "completion [bash|zsh|fish|powershell]",
 	Short: "Generate completion script",
 	Long: `To load completions:
