@@ -20,9 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"mug/mp"
-	"time"
+
+	"github.com/spf13/cobra"
 )
 
 var preferNpmBuild bool
@@ -30,7 +30,7 @@ var ngProfile string
 var ignoreTestOnBuild bool
 var goBuildTarget string
 var useNativeGradleForBuild bool
-var startTime time.Time
+var dockerBuild bool
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
@@ -53,9 +53,11 @@ func init() {
 	buildCmd.Flags().BoolVarP(&ignoreTestOnBuild, "ignore-tests", "i", false, "ignore tests on build")
 	buildCmd.Flags().StringVarP(&goBuildTarget, "target", "t", "", "go build target [linux | windows]")
 	buildCmd.Flags().BoolVarP(&useNativeGradleForBuild, "gradle", "g", false, "use native gradle binary instead of gradlew")
+	buildCmd.Flags().BoolVarP(&dockerBuild, "docker", "d", false, "additionally build docker container. you must provide infos in .mugfile")
 }
 
 func buildCommand(cmd *cobra.Command, args []string) {
+	mugFile := mp.ReadMugFile()
 	if mp.IsProjectType("angular") && !preferNpmBuild {
 		fmt.Println("running ng build " + ngProfile)
 		mp.Exec(mp.BuildAngular(args, ngProfile))
@@ -66,8 +68,11 @@ func buildCommand(cmd *cobra.Command, args []string) {
 		fmt.Println("running gradle clean build")
 		mp.Exec(mp.BuildGradle(args, useNativeGradleForBuild, ignoreTestOnBuild, mp.IsWindows()))
 	} else if mp.IsProjectType("go") {
-		mugFile := mp.ReadMugFile()
 		fmt.Println("running go build")
 		mp.ExecEnv(mp.BuildGo(args, mugFile.Build.Args, goBuildTarget))
+	}
+	if dockerBuild {
+		fmt.Print("running docker build")
+		mp.Exec(mp.BuildDocker(mugFile.Docker.Image, mugFile.Docker.Tags, mp.WorkingDirectory(), args))
 	}
 }

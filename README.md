@@ -55,6 +55,8 @@ supported project types:
   - `--ignore-tests, -i` do not run tests
 - go
   - `--target, -t <target>` build target, `linux` or `windows`
+- docker
+  - `--docker, -d` additionally run docker build command. the image and optionally the tags must be provided in a mugfile
 ### commit
 make a git commit with the be/beng specific commit tags. 
 

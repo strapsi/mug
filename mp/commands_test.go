@@ -257,6 +257,50 @@ func TestBuildGo(t *testing.T) {
 	}
 }
 
+func TestBuildDocker(t *testing.T) {
+	type args struct {
+		image string
+		tags  []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			"docker build with default tag",
+			args{
+				image: "image",
+				tags:  []string{},
+			},
+			[]string{"docker", "build", "--tag", "image", "."},
+		},
+		{
+			"docker build with a single tag",
+			args{
+				image: "image",
+				tags:  []string{"tag"},
+			},
+			[]string{"docker", "build", "--tag", "image:tag", "."},
+		},
+		{
+			"docker build with a multiple tags",
+			args{
+				image: "image",
+				tags:  []string{"tag", "gat"},
+			},
+			[]string{"docker", "build", "--tag", "image:tag", "--tag", "image:gat", "."},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := BuildDocker(tt.args.image, tt.args.tags, ".", []string{}); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("BuildDocker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRunAngular(t *testing.T) {
 	type args struct {
 		args []string

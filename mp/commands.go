@@ -69,6 +69,21 @@ func BuildGo(args []string, mugfileArgs []string, target string) ([]string, []st
 	return cmd, env
 }
 
+// BuildDocker returns the docker build command
+func BuildDocker(image string, tags []string, wd string, args []string) []string {
+	cmd := []string{"docker", "build"}
+	if len(tags) == 0 {
+		cmd = append(cmd, "--tag", image)
+	} else {
+		for _, tag := range tags {
+			cmd = append(cmd, "--tag", image+":"+tag)
+		}
+	}
+	cmd = append(cmd, wd)
+	cmd = append(cmd, args...)
+	return cmd
+}
+
 // RunAngular return the ng run exec command
 func RunAngular(args []string) []string {
 	cmd := []string{"ng", "serve"}

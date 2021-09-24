@@ -19,20 +19,28 @@ package mp
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"strings"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 // MugFile represents the known mugfile properties
 type MugFile struct {
-	_Version string
-	Build    MugFileBuild `yaml:",omitempty"`
+	_Version string        `yaml:"__version"`
+	Build    MugFileBuild  `yaml:"build,omitempty"`
+	Docker   MugFileDocker `yaml:"docker,omitempty"`
 }
 
 // MugFileBuild mug build properties
 type MugFileBuild struct {
-	Args []string `yaml:",omitempty"`
+	Args []string `yaml:"args,omitempty"`
+}
+
+// MugFileDocker mug properties for docker commands
+type MugFileDocker struct {
+	Image string   `yaml:"image"`
+	Tags  []string `yaml:"tags,omitempty"`
 }
 
 var mugFile = MugFile{}
