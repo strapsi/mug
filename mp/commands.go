@@ -153,6 +153,17 @@ func LogGit(args []string, format string, limit string, fileNames bool, graph bo
 	return cmd
 }
 
+// DeployDocker returns the docker deploy command
+func DeployDocker(image string, tag string) []string {
+	cmd := []string{"docker", "push"}
+	if len(tag) == 0 {
+		cmd = append(cmd, image)
+	} else {
+		cmd = append(cmd, image+":"+tag)
+	}
+	return cmd
+}
+
 func composeMessage(branch string, overrideType string, args []string) string {
 	if len(args) < 1 {
 		ExitWithError("wrong number of arguments. expecting message")
@@ -172,7 +183,7 @@ func parseCommitType(commitType string) string {
 	case "feature", "f":
 		return "FEATURE"
 	case "refactor", "r":
-		return "REFACTOR"
+		return "REFACTORING"
 	case "intern", "i":
 		return "INTERN"
 	case "style", "s":

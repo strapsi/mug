@@ -479,7 +479,7 @@ func TestFrdCommit(t *testing.T) {
 				"",
 			},
 			[]string{"git", "add", "."},
-			[]string{"git", "commit", "-m", "[REFACTOR][FRD-333] kann das sein"},
+			[]string{"git", "commit", "-m", "[REFACTORING][FRD-333] kann das sein"},
 		},
 		{
 			"frd commit with adding files with internal commit that is overwritten with style",
@@ -627,6 +627,34 @@ func TestLogGit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := LogGit(tt.args.args, tt.args.format, tt.args.limit, tt.args.fileNames, tt.args.graph); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("LogGit() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDeployDocker(t *testing.T) {
+	type args struct {
+		image string
+		tag   string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			"git log with default limit",
+			args{
+				"hans/dampf",
+				"a.b",
+			},
+			[]string{"docker", "push", "hans/dampf:a.b"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DeployDocker(tt.args.image, tt.args.tag); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DeployDocker() = %v, want %v", got, tt.want)
 			}
 		})
 	}
