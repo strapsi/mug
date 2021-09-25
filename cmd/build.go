@@ -35,7 +35,7 @@ var dockerBuild bool
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:     "build",
-	Aliases: []string{"b"},
+	Aliases: mp.Aliases["build"],
 	Short:   "build project",
 	Long:    `detects the type of project we are in and builds it`,
 	Run: func(cmd *cobra.Command, args []string) {

@@ -26,9 +26,10 @@ import (
 
 // deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "runs context specific deploy command (currently only docker is supported)",
-	Long:  `runs context specific deploy command (currently only docker is supported)`,
+	Use:     "deploy",
+	Aliases: mp.Aliases["deploy"],
+	Short:   "runs context specific deploy command (currently only docker is supported)",
+	Long:    `runs context specific deploy command (currently only docker is supported)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		deployCommand(cmd, args)
 	},

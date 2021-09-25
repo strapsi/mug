@@ -26,6 +26,18 @@ import (
 	"runtime"
 )
 
+// Aliases list of aliases for each command
+var Aliases map[string][]string = map[string][]string{
+	"build":   {"b"},
+	"commit":  {"c"},
+	"deploy":  {"d"},
+	"hash":    {"h"},
+	"log":     {"l"},
+	"proxy":   {"rp"},
+	"run":     {"r"},
+	"version": {"v"},
+}
+
 // IsProjectType determines the type of project mug is executed in
 func IsProjectType(projectType string) bool {
 	var filename string

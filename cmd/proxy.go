@@ -21,24 +21,26 @@ package cmd
 import (
 	"crypto/tls"
 	"encoding/json"
-	"github.com/spf13/cobra"
-	"github.com/strapsi/go-docker"
 	"mug/mp"
 	"net/http"
 	"strings"
+
+	"github.com/spf13/cobra"
+	"github.com/strapsi/go-docker"
 )
 
-var kongUrl string
+var kongURL string
 var proxyBackendModule string
-var proxyBackendUrl string
-var angularUrl string
+var proxyBackendURL string
+var angularURL string
 var credentials string
 
 // proxyCmd represents the proxy command
 var proxyCmd = &cobra.Command{
-	Use:   "proxy",
-	Short: "start the kong proxy container",
-	Long:  `a long version of the short version :D`,
+	Use:     "proxy",
+	Aliases: mp.Aliases["proxy"],
+	Short:   "start the kong proxy container",
+	Long:    `a long version of the short version :D`,
 	Run: func(cmd *cobra.Command, args []string) {
 		proxyCommand()
 	},
@@ -46,10 +48,10 @@ var proxyCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(proxyCmd)
-	proxyCmd.Flags().StringVarP(&kongUrl, "kong-url", "k", "10.10.227.175", "kong url")
+	proxyCmd.Flags().StringVarP(&kongURL, "kong-url", "k", "10.10.227.175", "kong url")
 	proxyCmd.Flags().StringVarP(&proxyBackendModule, "backend", "b", "", "name of the backend module")
-	proxyCmd.Flags().StringVarP(&proxyBackendUrl, "backend-url", "u", "", "url of the backend")
-	proxyCmd.Flags().StringVarP(&angularUrl, "angular-url", "a", "", "url of the frontend")
+	proxyCmd.Flags().StringVarP(&proxyBackendURL, "backend-url", "u", "", "url of the backend")
+	proxyCmd.Flags().StringVarP(&angularURL, "angular-url", "a", "", "url of the frontend")
 	proxyCmd.Flags().StringVarP(&credentials, "credentials", "c", "user1:be32", "<user>:<password>")
 }
 
@@ -69,7 +71,7 @@ func proxyCommand() {
 func login() string {
 	transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
 	client := &http.Client{Transport: transport}
-	url := buildUrl()
+	url := buildURL()
 	response, err := client.Get(url)
 	mp.CheckErrorExit(err)
 	defer response.Body.Close()
@@ -84,23 +86,23 @@ func buildDockerEnv(token string) map[string]string {
 	dockerEnv := map[string]string{
 		"BE_TOKEN": token,
 	}
-	if kongUrl != "" {
-		dockerEnv["KONG_URL"] = kongUrl
+	if kongURL != "" {
+		dockerEnv["KONG_URL"] = kongURL
 	}
-	if proxyBackendModule != "" && proxyBackendUrl != "" {
+	if proxyBackendModule != "" && proxyBackendURL != "" {
 		dockerEnv["BACKEND_MODULE"] = proxyBackendModule
-		dockerEnv["BACKEND_URL"] = proxyBackendUrl
+		dockerEnv["BACKEND_URL"] = proxyBackendURL
 	}
-	if angularUrl != "" {
-		dockerEnv["NG_URL"] = angularUrl
+	if angularURL != "" {
+		dockerEnv["NG_URL"] = angularURL
 	}
 	return dockerEnv
 }
 
-func buildUrl() string {
+func buildURL() string {
 	parts := strings.Split(credentials, ":")
 	if len(parts) != 2 {
 		mp.ExitWithError("wrong credentials format. has to be <user>:<password>")
 	}
-	return "https://" + kongUrl + "/api/auth/auth?login=" + parts[0] + "&password=" + parts[1]
+	return "https://" + kongURL + "/api/auth/auth?login=" + parts[0] + "&password=" + parts[1]
 }

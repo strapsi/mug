@@ -20,15 +20,18 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"mug/build"
+	"mug/mp"
+
+	"github.com/spf13/cobra"
 )
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "shows program version",
-	Long:  "shows program version",
+	Use:     "version",
+	Aliases: mp.Aliases["version"],
+	Short:   "shows program version",
+	Long:    "shows program version",
 	Run: func(cmd *cobra.Command, args []string) {
 		versionCommand()
 	},

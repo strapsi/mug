@@ -19,10 +19,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/strapsi/go-docker"
 	"mug/mp"
 	"regexp"
+
+	"github.com/spf13/cobra"
+	"github.com/strapsi/go-docker"
 )
 
 var gitLogFormat = "%C(yellow)%h%C(reset) %C(auto)%d%C(reset) %s %C(blue)%cr%C(reset) by %C(green)%cn%C(reset)"
@@ -35,7 +36,7 @@ var withGitFileNames bool
 // logCmd represents the log command
 var logCmd = &cobra.Command{
 	Use:     "log",
-	Aliases: []string{"l"},
+	Aliases: mp.Aliases["log"],
 	Short:   "output log",
 	Long:    `outputs log`,
 	Run: func(cmd *cobra.Command, args []string) {

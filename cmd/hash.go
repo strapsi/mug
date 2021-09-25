@@ -21,16 +21,19 @@ package cmd
 import (
 	"crypto/sha512"
 	"fmt"
+
 	"github.com/spf13/cobra"
+
 	// "golang.design/x/clipboard"
 	"mug/mp"
 )
 
 // hashCmd represents the hash command
 var hashCmd = &cobra.Command{
-	Use:   "hash",
-	Short: "hash the input string",
-	Long:  `returns a sha512 hash of the given string`,
+	Use:     "hash",
+	Aliases: mp.Aliases["hash"],
+	Short:   "hash the input string",
+	Long:    `returns a sha512 hash of the given string`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			mp.ExitWithError("no string input provided")

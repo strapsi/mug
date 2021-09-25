@@ -20,8 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"mug/mp"
+
+	"github.com/spf13/cobra"
 )
 
 var preferNpmStart bool
@@ -30,8 +31,9 @@ var useNativeGradleForRun bool
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
-	Use:   "run",
-	Short: "runs default development environment for working directory",
+	Use:     "run",
+	Aliases: mp.Aliases["run"],
+	Short:   "runs default development environment for working directory",
 	Long: `Checks which project we are in and runs the according run command
 e.g. gradle bootRun or ng serve`,
 	Run: func(cmd *cobra.Command, args []string) {

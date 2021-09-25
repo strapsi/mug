@@ -20,8 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"mug/mp"
+
+	"github.com/spf13/cobra"
 )
 
 var addAll bool
@@ -29,9 +30,10 @@ var overrideType string
 
 // commitCmd represents the commit command
 var commitCmd = &cobra.Command{
-	Use:   "commit",
-	Short: "beng commit helper",
-	Long:  `add correct commit tags for beng repositories`,
+	Use:     "commit",
+	Aliases: mp.Aliases["commit"],
+	Short:   "beng commit helper",
+	Long:    `add correct commit tags for beng repositories`,
 	Run: func(cmd *cobra.Command, args []string) {
 		commitCommand(cmd, args)
 	},
