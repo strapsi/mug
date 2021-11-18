@@ -1,5 +1,4 @@
 /*
-
 Package mp : command helper functions
 
 Copyright © 2021 m.vondergruen@protonmail.com
@@ -161,6 +160,12 @@ func DeployDocker(image string, tag string) []string {
 	} else {
 		cmd = append(cmd, image+":"+tag)
 	}
+	return cmd
+}
+
+// EditConfigFile returns a command to edit the given config file
+func EditConfigFile(name string) []string {
+	cmd := []string{"micro", name}
 	return cmd
 }
 

@@ -24,7 +24,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"mug/build"
-	"os"
 	"time"
 )
 
@@ -65,10 +64,6 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file")
 	rootCmd.PersistentFlags().BoolVarP(&beVerbose, "verbose", "v", false, "print out more information")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -84,12 +79,17 @@ func initConfig() {
 		// Search config in home directory with name ".mug" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".mug")
+		viper.SetConfigType("yml")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
+	//fmt.Println("hallo000")
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		//fmt.Printf("config ist: %v\n", viper.GetStringMapString("config")["fish-config"])
+		//fmt.Printf("config: %v\n", viper.Get("config"))
+		//fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		//fmt.Fprintf(os.Stderr, "config: %v\n", viper.Get("config"))
 	}
 }

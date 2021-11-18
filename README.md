@@ -18,6 +18,7 @@ a command line tool to make the daily work easier
 - [Commands](#commands)
     * [build](#build)
     * [commit](#commit)
+    * [config](#config)
     * [hash](#hash)
     * [log](#log)
     * [proxy](#proxy)
@@ -76,6 +77,10 @@ following types can be used:
 `--add` add all changed files before the commit
 
 `--type <type>` override the commit type that is derived from the branch name
+### config
+edit a defined config file by its name. associate a config file with a name in the .mug.yml file
+
+`<name>` name of config file
 ### hash
 prints out a sha512 hash of the given input string
 ### log

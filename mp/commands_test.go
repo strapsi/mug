@@ -643,7 +643,7 @@ func TestDeployDocker(t *testing.T) {
 		want []string
 	}{
 		{
-			"git log with default limit",
+			"simple docker deploy command",
 			args{
 				"hans/dampf",
 				"a.b",
@@ -655,6 +655,32 @@ func TestDeployDocker(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := DeployDocker(tt.args.image, tt.args.tag); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("DeployDocker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEditConfigFile(t *testing.T) {
+	type args struct {
+		name string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			"open config file with micro",
+			args{
+				"/home/coole/config",
+			},
+			[]string{"micro", "/home/coole/config"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := EditConfigFile(tt.args.name); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("EditConfigFile() = %v, want %v", got, tt.want)
 			}
 		})
 	}
